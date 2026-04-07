@@ -1,8 +1,9 @@
 import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
-import { Link, router } from 'expo-router'
-import React, { useState } from 'react'
+import { Link } from 'expo-router'
+import { useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
+import useAuthStore from '../../store/auth.store'
 
 const SignIn = () => {
   const [isSumitting, setIsSubmitting] = useState(false);
@@ -11,14 +12,19 @@ const SignIn = () => {
     password: '',
   });
 
+  const { fetchAuthentication } = useAuthStore()
+
   const submit = async () => {
     if( !form.email || !form.password ) return Alert.alert('Please fill in all fields');
 
     setIsSubmitting(true);
 
     try {
-      Alert.alert('Success', 'User signed in successfully');
-      router.push('/');
+      const user = await useAuthStore.getState().fetchAuthentication({
+        email: form.email,
+        password: form.password
+      });
+      // router.push('/');
     } catch (error) {
       Alert.alert('Error', 'An error occurred while signing in');
     } finally {
@@ -50,8 +56,8 @@ const SignIn = () => {
           />
           <View className='flex justify-center mt-5 flex-row gap-2'>
             <Text className='base-regular text-gray-100'>Don't have an account? </Text>
-            <Link href='/sign-up' className='base-bold text-primary'>
-              Sign Up
+            <Link asChild href='/sign-up' className='base-bold text-primary'>
+              <Text>Sign Up</Text>
             </Link>
           </View>
     </View>

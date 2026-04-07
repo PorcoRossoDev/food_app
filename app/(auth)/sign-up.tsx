@@ -1,7 +1,7 @@
 import CustomButton from '@/components/CustomButton';
 import CustomInput from '@/components/CustomInput';
 import { Link, router } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
 const SignUp = () => {
@@ -58,8 +58,8 @@ const SignUp = () => {
             />
             <View className='flex justify-center mt-5 flex-row gap-2'>
                 <Text className='base-regular text-gray-100'>Already have an account? </Text>
-                <Link href='/sign-in' className='base-bold text-primary'>
-                    Sign In
+                <Link asChild href='/sign-in' className='base-bold text-primary'>
+                    <Text>Sign In</Text>
                 </Link>
             </View>
         </View>
