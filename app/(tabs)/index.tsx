@@ -28,7 +28,7 @@ export default function App() {
                       <Image source={item.image} className={'size-full'} resizeMode={'contain'} />
                     </View>
                     <View className={cn('offer-card__info', isEven ? 'pl-10' : 'pr-10')}>
-                      <Text className="h1-bold text-white leading-tight">{item.title}</Text>
+                      <Text className="h1-bold font-bold text-white leading-tight">{item.title}</Text>
                       <Image 
                         source={images.arrowRight}
                         className="size-10"
