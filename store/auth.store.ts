@@ -1,4 +1,5 @@
 import { User } from '@/type';
+import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
 import { create } from 'zustand';
 import api from '../service/api';
@@ -38,7 +39,8 @@ const useAuthStore = create<AuthState>((set) => ({
                     access_token: res.data.access_token,
                     token_type: res.data.token_type
                 });
-                return user; // 👈 trả về để bên ngoài dùng
+                await SecureStore.setItemAsync('token', res.data.access_token);
+                return user;
             }
 
             throw new Error('Login failed'); // fallback

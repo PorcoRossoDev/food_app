@@ -29,7 +29,7 @@ const Search = () => {
 
   useEffect(() => {
   }, [menuList, categories]);
-
+  
   return (
     <SafeAreaView className='bg-white h-full'>
       <FlatList

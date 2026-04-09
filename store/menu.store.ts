@@ -19,7 +19,7 @@ const useMenuStore = create<MenuState>((set) => ({
             const res = await api.get(`menus?category=${category}&keyword=${keyword}`);
             set({ menuList: res.data.data });
         } catch (error) {
-            console.log('API ERROR:', error); // 👈 bắt buộc log ra
+            console.log('API ERROR:', error);
         } finally {
         }
     }

@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { create } from 'zustand';
 import api from '../service/api';
 
@@ -13,6 +14,7 @@ const useCategoryStore = create<CategoryState>((set) => ({
             const res = await api.get('categories');
             set({ categories: res.data.data })
         } catch (error) {
+            Alert.alert('Lỗi!');
             throw error;
         }
     }

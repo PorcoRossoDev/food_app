@@ -66,6 +66,12 @@ const TabLayout = () => {
                     tabBarIcon: (({focused}) => <TabBarIcon title="Profile" icon={images.person} focused={focused} />)
                 }}
             />
+            <Tabs.Screen
+                name="menu/[id]"
+                options={{
+                    href: null, // vẫn ẩn nếu cần
+                }}
+            />
         </Tabs>
     )
 }
