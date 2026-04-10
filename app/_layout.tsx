@@ -19,16 +19,27 @@ export default function RootLayout() {
     'QuickSand-Light': require('../assets/fonts/Quicksand-Light.ttf'),
   })
 
-  useEffect(() => {
-    if(error) throw error; // Nếu lỗi thì ném lỗi ra để có thể debug
-    if( fontsLoaded ) SplashScreen.hideAsync(); // Nếu tải xong thì ẩn màn hình chờ
-  }, [fontsLoaded, error])
+  // useEffect(() => {
+  //   if(error) throw error; // Nếu lỗi thì ném lỗi ra để có thể debug
+  //   if( fontsLoaded ) SplashScreen.hideAsync(); // Nếu tải xong thì ẩn màn hình chờ
+  // }, [fontsLoaded, error])
+
+  // useEffect(() => {
+  //   fetchAuthentication
+  // }, [])
+
+  // if( !fontsLoaded || isLoading ) return null
 
   useEffect(() => {
-    fetchAuthentication
-  }, [])
+    // fetchAuthentication(); // ✅ FIX
+  }, []);
 
-  if( !fontsLoaded || isLoading ) return null
+  useEffect(() => {
+    if (error) throw error;
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [fontsLoaded, error]);
+
+  if (!fontsLoaded) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

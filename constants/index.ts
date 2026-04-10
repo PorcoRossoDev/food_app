@@ -22,6 +22,7 @@ import arrowBack from "../assets/icons/arrow-back.png";
 import avatar from "@/assets/images/avatar.png";
 import avocado from "@/assets/images/avocado.png";
 import bacon from "@/assets/images/bacon.png";
+import burgerDetail from "@/assets/images/burger-detail.png";
 import burgerOne from "@/assets/images/burger-one.png";
 import burgerTwo from "@/assets/images/burger-two.png";
 import buritto from "@/assets/images/buritto.png";
@@ -199,4 +200,5 @@ export const images = {
     star,
     trash,
     user,
+    burgerDetail,
 };
