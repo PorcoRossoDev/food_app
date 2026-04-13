@@ -13,11 +13,15 @@ const useCutomizationStore = create<Customization>((set) => ({
     fetCustomization: async () => {
         try {
             const res = await api.get('customizations');
-            const data = res.data.data;
-            const topping = data.filters((item: any) => item.type == 'topping');
-            const side = data.filters((item: any) => item.type == 'side');
-            set({ topping: topping, side: side });
-            console.log(topping, side, data);
+            const data = res.data;
+            const grouped = data.reduce((acc: any, item: any) => {
+                if (!acc[item.type]) {
+                    acc[item.type] = [];
+                }
+                acc[item.type].push(item);
+                return acc;
+            }, {});
+            set({ topping: grouped.topping ?? [], side: grouped.side ?? [] });
         } catch (error) {
             console.log('API ERROR:', error);
         }

@@ -42,7 +42,6 @@ const useAuthStore = create<AuthState>((set) => ({
                 await SecureStore.setItemAsync('token', res.data.access_token);
                 return user;
             }
-
             throw new Error('Login failed'); // fallback
         } catch (e: any) {
             const errorMessage = e.response?.data?.message || 'Please check your email and password';
