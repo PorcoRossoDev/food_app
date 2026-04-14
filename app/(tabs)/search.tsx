@@ -22,6 +22,12 @@ const Search = () => {
   useEffect(() => {
     fetchMenus(category, keyword);
   }, [category, keyword])
+
+  // useEffect(() => {
+  //   if (!category && !keyword) return;
+
+  //   fetchMenus(category, keyword);
+  // }, [category, keyword]);
   
   useEffect(() => {
     fetchCategores();

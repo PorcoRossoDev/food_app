@@ -34,7 +34,7 @@ const MenuDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const { id } = useLocalSearchParams<Params>();
 
-  const { addToCart, addOption } = useCartStore();
+  const { addToCart, addOption, cart } = useCartStore();
 
   useEffect(() => {
     fetCustomization();
@@ -42,8 +42,10 @@ const MenuDetail = () => {
 
   useEffect(() => {
     if (!id) return;
+    useMenuStore.setState({ detail: null });
     fetchDetail(id);
   }, [id]);
+
 
   const changeQty = (text: string) => {
     const num = parseInt(text, 10);
@@ -68,13 +70,26 @@ const MenuDetail = () => {
   const decrease = () => qtyRange("minus");
 
   const handleAddToCart = () => {
-    addToCart({ id: detail?.id, qty: quantity });
+    addToCart({ id: detail?.id, title: detail?.name, qty: quantity, image: detail?.image_url, price: detail?.price });
     Alert.alert("Add to cart success!");
   };
 
   const handleAddOption = (idOption: string) => {
-    addOption({ id: detail?.id, idOption: idOption, qty: 1 });
+    const check = cart.find(item => item.id == detail?.id)
+    if(!check){
+      Alert.alert('You must add product to cart to add more options.')
+    } else {
+      addOption({ id: detail?.id, idOption: idOption, qty: 1 });
+    }
   };
+
+  const countOption = (productId: string, optionId: string) => {
+    const cartItem = cart.find(item => item.id == detail?.id)
+    if (!cartItem) return 0;
+    const optionItem = cartItem.options.find(op => op.id === optionId);
+
+    return optionItem?.qty ?? 0;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -112,7 +127,7 @@ const MenuDetail = () => {
                       source={images.star}
                       className="size-5"
                       style={{
-                        tintColor: index < detail?.rating ? "" : "#ccc",
+                        tintColor: index < detail?.rating ? "#FE8C00" : "#ccc",
                       }}
                     />
                   ))}
@@ -175,7 +190,7 @@ const MenuDetail = () => {
                   className="size-6"
                   resizeMode="contain"
                 />
-                <Text className="ml-2 font-bold">4.5</Text>
+                <Text className="ml-2 font-bold">{detail?.rating}</Text>
               </View>
             </View>
             <Text className="mt-6 base-bold text-gray-500">
@@ -198,7 +213,7 @@ const MenuDetail = () => {
                       className="flex-center absolute top-0 z-10 w-full"
                       style={{
                         backgroundColor: "#fff",
-                        borderRadius: 12,
+                        borderRadius: 20,
 
                         shadowColor: "#000",
                         shadowOffset: { width: 0, height: 2 },
@@ -213,22 +228,39 @@ const MenuDetail = () => {
                         className="size-20"
                         resizeMode="contain"
                       />
+                      <Text className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-red-600 text-white flex-center justify-center items-center text-center">{countOption(detail?.id, item.id)}</Text>
                     </View>
-                    <View className="bg-[#3C2F2F] rounded-3xl h-32 px-3 pb-3 flex-end flex-row mt-3">
+                    <View className="bg-[#3C2F2F] rounded-3xl h-32 px-3 pb-3 flex-end flex-row mt-2">
                       <View className="justify-between flex-row h-9 w-full items-start gap-x-4">
                         <Text className="text-white w-[60%]" numberOfLines={2}>
                           {item.name}
                         </Text>
-                        <TouchableOpacity
-                          onPress={() => handleAddOption(item.id)}
-                          className="w-5 h-5 bg-red-600 flex-center rounded-full flex-1"
-                        >
-                          <Image
-                            source={images.plus}
-                            className="size-2"
-                            style={{ tintColor: "white" }}
-                          />
-                        </TouchableOpacity>
+                        <View className="flex-1 flex-col gap-y-1">
+                          <TouchableOpacity
+                            onPress={() => handleAddOption(item.id)}
+                            className="w-5 h-5 bg-red-600 flex-center rounded-full "
+                          >
+                            <Image
+                              source={images.plus}
+                              className="size-2"
+                              style={{ tintColor: "white" }}
+                            />
+                          </TouchableOpacity>
+                          {
+                            countOption(detail?.id, item.id) > 0 &&
+                            <TouchableOpacity
+                              onPress={() => handleAddOption(item.id)}
+                              className="w-5 h-5 bg-red-600 flex-center rounded-full "
+                            >
+                              <Image
+                                source={images.minus}
+                                resizeMode="contain"
+                                className="size-2"
+                                style={{ tintColor: "white" }}
+                              />
+                            </TouchableOpacity>
+                          }
+                        </View>
                       </View>
                     </View>
                   </View>
@@ -254,7 +286,7 @@ const MenuDetail = () => {
                       className="flex-center absolute top-0 z-10 w-full"
                       style={{
                         backgroundColor: "#fff",
-                        borderRadius: 12,
+                        borderRadius: 20,
 
                         shadowColor: "#000",
                         shadowOffset: { width: 0, height: 2 },
