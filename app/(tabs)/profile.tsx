@@ -1,38 +1,53 @@
+import EditUser from '@/components/EditUser'
 import { images } from '@/constants'
+import useAuthStore from '@/store/auth.store'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Profile = () => {
 
+  const { fetchLogout, user } = useAuthStore();
+  const bottomSheetRef = useRef(null);
+  const openSheet = useCallback(() => {
+      bottomSheetRef.current?.present();
+  }, []);
+  const closeSheet = useCallback(() => {
+      bottomSheetRef.current?.dismiss();
+  }, []);
+
+  const handleUpdate = () => {
+    openSheet();
+  }
+
   const data = [
     {
       icon: images.user,
       name: 'Full Name',
-      value: 'Adran Hajdin'
+      value: user?.name
     },
     {
       icon: images.envelope,
       name: 'Email',
-      value: 'adrian@gmail.com'
+      value: user?.email
     },
     {
       icon: images.phone,
       name: 'Phone number',
-      value: '0952587458'
+      value: user?.phone
     },
     {
       icon: images.location,
       name: 'Address - (Home)',
-      value: '123 Main Street, Springfield, IL 62704'
+      value: user?.address
     },
-    {
-      icon: images.location,
-      name: 'Address - (Work)',
-      value: '221B Rose Street, FoodVille, FL 12345'
-    },
-  ]
+  ];
+
+  const handleLogout = () => {
+    fetchLogout()
+    router.push('/(auth)/sign-in')
+  }
 
   return (
     <SafeAreaView className=' bg-[#FAFAFA] flex-1'>
@@ -80,15 +95,19 @@ const Profile = () => {
         ListFooterComponent={() => {
           return (
             <View className='bg-[#FAFAFA] pt-9 mb-10 pb-24'>
-              <TouchableOpacity onPress={() => {}} className='border-[#FE8C00] bg-[#fe8c001e] text-center border-[1px] px-4 py-4 rounded-3xl' >
+              <TouchableOpacity onPress={handleUpdate} className='border-[#FE8C00] bg-[#fe8c001e] text-center border-[1px] px-4 py-4 rounded-3xl' >
                 <Text className='text-center color-primary'>Edit Profile</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}} className='border-[#F14141] mt-5 bg-[#f141411c] text-center border-[1px] px-4 py-4 rounded-3xl'>
+              <TouchableOpacity onPress={handleLogout} className='border-[#F14141] mt-5 bg-[#f141411c] text-center border-[1px] px-4 py-4 rounded-3xl'>
                 <Text className='text-center color-[#F14141]'>Logout</Text>
               </TouchableOpacity>
             </View>
           )
         }}
+      />
+      <EditUser
+          ref={bottomSheetRef}
+          onClose={closeSheet}
       />
     </SafeAreaView>
   )

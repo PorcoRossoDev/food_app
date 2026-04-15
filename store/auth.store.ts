@@ -15,6 +15,8 @@ type AuthState = {
     setUser: (user: User | null) => void,
     setLoading: (isLoading: boolean) => void,
     fetchAuthentication: ({ email, password }: { email: string; password: string }) => Promise<void>,
+    fetchLogout: () => void,
+    fetchUpdateUser: (payload: {}, id: string) => void,
 }
 
 const useAuthStore = create<AuthState>((set) => ({
@@ -50,6 +52,32 @@ const useAuthStore = create<AuthState>((set) => ({
             throw e; // ✅ Re-throw error để catch block bên ngoài nhận được
         } finally {
             set({ isLoading: false });
+        }
+    },
+    fetchLogout: async () => {
+        try {
+            await api.post('logout');
+        } catch (error) {
+            throw new Error("Error!");
+        } finally {
+            set({
+                isAuthenticated: false,
+                user: null,
+                access_token: '',
+                token_type: '',
+                isLoading: false,
+            })
+            await SecureStore.deleteItemAsync('token')
+        }
+    },
+    fetchUpdateUser: async(payload, id) => {
+        try {            
+            const res = await api.put(`user/${id}`, payload);
+            set({user: res.data.user});
+            console.log(JSON.stringify(res, null, 2))
+            Alert.alert(res.data.message);
+        } catch (error) {
+            throw new Error("Error!");
         }
     }
 }))

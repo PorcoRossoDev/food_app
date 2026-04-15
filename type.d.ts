@@ -86,6 +86,16 @@ interface CustomInputProps {
     keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
 }
 
+interface CustomInputFormProps {
+    placeholder?: string;
+    value?: string;
+    onChangeText?: (text: string) => void;
+    label: string;
+    secureTextEntry?: boolean;
+    keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+    classData?: string
+}
+
 interface ProfileFieldProps {
     label: string;
     value: string;

@@ -17,7 +17,7 @@ const useMenuStore = create<MenuState>((set) => ({
     current_page: 1,
     per_page: 20,
     total: 0,
-    fetchMenus: async (category, keyword) => {
+    fetchMenus: async (category = '0', keyword) => {
         try {
             const res = await api.get(`menus?category=${category}&keyword=${keyword}`);
             set({ menuList: res.data.data });

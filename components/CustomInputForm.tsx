@@ -1,16 +1,17 @@
-import { CustomInputProps } from '@/type';
+import { CustomInputFormProps } from '@/type';
 import cn from 'clsx';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
-const CustomInput = ({ 
+const CustomInputForm = ({ 
     placeholder = 'Enter text', 
     value, 
     onChangeText, 
     label, 
     secureTextEntry = false,
-    keyboardType = 'default'
-}: CustomInputProps) => {
+    keyboardType = 'default',
+    classData
+}: CustomInputFormProps) => {
 
     const [isFocused, setIsFocused] = useState(false);
   return (
@@ -28,12 +29,12 @@ const CustomInput = ({
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         placeholderTextColor={'#888'}
-        className={cn('input', isFocused ? 'border-primary' : 'border-gray-300')}
+        className={cn('input', isFocused ? 'border-primary' : 'border-gray-300', classData)}
       />
     </View>
   )
 }
 
-export default CustomInput
+export default CustomInputForm
 
 const styles = StyleSheet.create({})
